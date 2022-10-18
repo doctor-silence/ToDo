@@ -1,6 +1,6 @@
 
 {% if user.is_authenticated %}
-Вы вошли как {{ user.username }}
+Вы авторизованы как {{ user.username }}
 
 <form action="{% url 'logoutuser' %}" method="POST">
     {% csrf_token %}
@@ -9,8 +9,8 @@
 
 
 {% else %}
-<a href="#">Регистрация</a>
-<a href="#">Войти</a>
+<a href="{% url 'signupuser' %}">Регистрация</a>
+<a href="{% url 'loginuser' %}">Войти</a>
 
 {% endif %}
 <br>
