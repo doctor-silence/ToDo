@@ -4,6 +4,9 @@ from django.contrib.auth.models import User
 from django.db import IntegrityError
 from django.shortcuts import render, redirect
 
+from .forms import TodoForm
+
+
 def home(request):
     return render(request, 'todo/home.html')
 def signupuser(request):
@@ -37,6 +40,12 @@ def logoutuser(request):
     if request.method == 'POST':
         logout(request)
         return redirect('home')
+
+def createtodo(request):
+    if request.method == 'GET':
+        return render(request, 'todo/createtodo.html', {'form':TodoForm()})
+    else:
+        pass
 
 def currenttodos(request):
     return render(request, 'todo/currenttodos.html')
