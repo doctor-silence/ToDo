@@ -5,6 +5,7 @@ from django.db import IntegrityError
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Todo
 from django.utils import timezone
+from django.contrib.auth.decorators import login_required  # Пометка просмотр только для зарегистрированных пользователей
 
 from .forms import TodoForm
 
@@ -38,11 +39,12 @@ def loginuser(request):
         else:
             login(request, user)
             return redirect('currenttodos')
+@login_required
 def logoutuser(request):
     if request.method == 'POST':
         logout(request)
         return redirect('home')
-
+@login_required
 def createtodo(request):
     if request.method == 'GET':
         return render(request, 'todo/createtodo.html', {'form':TodoForm()})
@@ -55,11 +57,15 @@ def createtodo(request):
             return redirect('currenttodos')
         except ValueError:
             return render(request, 'todo/createtodo.html', {'form': TodoForm(), 'error':'Переданны неверные данные'})
-
+@login_required
 def currenttodos(request):
     todos = Todo.objects.filter(user=request.user, datecompleted__isnull=True)   #Отображать все добавленные заметки, делаем только заметки того пользователя кому они принадлежат.
     return render(request, 'todo/currenttodos.html', {'todos': todos})
-
+@login_required
+def completedtodos(request):
+    todos = Todo.objects.filter(user=request.user, datecompleted__isnull=False).order_by('-datecompleted')  #Отображать все заметки которые были выполнены(в хранологическом порядке)
+    return render(request, 'todo/completedtodos.html', {'todos': todos})
+@login_required
 def viewtodo(request, todo_pk):
     todo = get_object_or_404(Todo, pk=todo_pk, user=request.user)# Поиск записи в базе данных по ключу
     if request.method == 'GET':
@@ -72,17 +78,16 @@ def viewtodo(request, todo_pk):
             return redirect('currenttodos')
         except ValueError:
             return render(request, 'todo/viewtodo.html', {'todo': todo, 'form':form, 'error':'Bed'})
-
+@login_required
 def completetodo(request, todo_pk):   # Добавляем выполнение заметки
     todo = get_object_or_404(Todo, pk=todo_pk, user=request.user)
     if request.method == 'POST':
         todo.datecompleted = timezone.now()
         todo.save()
         return redirect('currenttodos')
-
+@login_required
 def deletetodo(request, todo_pk):  # Добавляем удаление заметки
     todo = get_object_or_404(Todo, pk=todo_pk, user=request.user)
     if request.method == 'POST':
-        todo.datecompleted = timezone.now()
         todo.delete()
         return redirect('currenttodos')

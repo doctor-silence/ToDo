@@ -2,6 +2,10 @@
 {% if user.is_authenticated %}
 Вы авторизованы как {{ user.username }}
 
+<a href="{% url 'createtodo' %}">Создать</a>
+<a href="{% url 'currenttodos' %}">Текущие</a>
+<a href="{% url 'completedtodos' %}">Выполненые</a>
+
 <form action="{% url 'logoutuser' %}" method="POST">
     {% csrf_token %}
 <button type="submit">Выход</button>
