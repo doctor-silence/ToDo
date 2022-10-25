@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.db import IntegrityError
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Todo
+from django.utils import timezone
 
 from .forms import TodoForm
 
@@ -72,3 +73,16 @@ def viewtodo(request, todo_pk):
         except ValueError:
             return render(request, 'todo/viewtodo.html', {'todo': todo, 'form':form, 'error':'Bed'})
 
+def completetodo(request, todo_pk):   # Добавляем выполнение заметки
+    todo = get_object_or_404(Todo, pk=todo_pk, user=request.user)
+    if request.method == 'POST':
+        todo.datecompleted = timezone.now()
+        todo.save()
+        return redirect('currenttodos')
+
+def deletetodo(request, todo_pk):  # Добавляем удаление заметки
+    todo = get_object_or_404(Todo, pk=todo_pk, user=request.user)
+    if request.method == 'POST':
+        todo.datecompleted = timezone.now()
+        todo.delete()
+        return redirect('currenttodos')
