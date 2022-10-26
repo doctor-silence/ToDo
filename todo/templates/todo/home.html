@@ -1,6 +1,19 @@
-{% extends 'todo/base.html' %}
-{% block content %}
+{% extends "todo/base.html" %}
 
-Home
+{% block content %}
+<br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+<div class="row justify-content-center mt-5">
+        <div class="col-md-7 text-center">
+
+                 <h1>Просто ваши дела!</h1>
+            <p>Жизнь веселая. Но жизнь тоже занята. Есть миллион разных вещей, которыми вы могли бы заниматься. Но важно то, <u>что</u> вы делаете. Мы создали <b><i>Todo Woo</i></b> чтобы помочь вам понять все ваши возможности и жить той жизнью, которая важнее всего для вас. Ваша новая организованная жизнь ждет.</p>
+        <a role="button" class="btn btn-primary btn-lg" href="{% url 'signupuser' %}">Начнем!</a>
+        </div>
+    </div>
 
 {% endblock %}
